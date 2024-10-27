@@ -1,3 +1,4 @@
+
 namespace keepr.Repositories;
 
 public class AccountsRepository
@@ -32,16 +33,26 @@ public class AccountsRepository
     return newAccount;
   }
 
-  internal Account Edit(Account update)
+  internal Account Edit(Account updatedAccount)
   {
     string sql = @"
             UPDATE accounts
             SET 
               name = @Name,
-              picture = @Picture
+              picture = @Picture,
+              coverImg = @CoverImg
+            WHERE id = @Id;
+            
+            SELECT * FROM accounts
             WHERE id = @Id;";
-    _db.Execute(sql, update);
-    return update;
+
+    return _db.Query<Account>(sql, updatedAccount).FirstOrDefault();
+  }
+
+  internal Profile GetProfile(string profileId)
+  {
+    string sql = "SELECT * FROM accounts WHERE id = @profileId;";
+    return _db.Query<Profile>(sql, new { profileId }).FirstOrDefault();
   }
 }
 

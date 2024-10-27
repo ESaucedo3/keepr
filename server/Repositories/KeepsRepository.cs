@@ -44,6 +44,8 @@ public class KeepsRepository
   internal Keep GetSpecificKeep(int keepId)
   {
     string sql = @"
+    UPDATE keeps SET views = views + 1 WHERE keeps.id = @keepId;
+    
     SELECT * 
     FROM keeps
     JOIN accounts ON accounts.id = keeps.creatorId
@@ -93,5 +95,22 @@ public class KeepsRepository
     {
       throw new Exception("More than 1 keep was deleted not very good at all!");
     }
+  }
+
+  internal List<Keep> GetProfileKeeps(string profileId)
+  {
+    string sql = @"
+    SELECT * FROM keeps
+    JOIN 
+      accounts ON accounts.id = keeps.creatorId
+    WHERE
+      keeps.creatorId = @profileId;
+    ;";
+
+    return _db.Query(sql, (Keep k, Profile p) =>
+    {
+      k.Creator = p;
+      return k;
+    }, new { profileId }).ToList();
   }
 }

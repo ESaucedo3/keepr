@@ -23,10 +23,21 @@ public class VaultsService
     return $"{vault.Name} successfully deleted";
   }
 
+  internal List<Vault> GetAccountVaults(string userId)
+  {
+    return _repository.GetAccountVaults(userId);
+  }
+
+  internal List<Vault> GetProfileVaults(string profileId)
+  {
+    return _repository.GetProfileVaults(profileId);
+  }
+
   internal Vault GetSpecificVault(int vaultId)
   {
     Vault vault = _repository.GetSpecificVault(vaultId);
     if (vault == null) throw new Exception($"Invalid ID: {vaultId}");
+    else if (vault.IsPrivate == true) throw new Exception("This vault is currently private access denied!");
     return vault;
   }
 

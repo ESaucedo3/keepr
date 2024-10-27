@@ -80,4 +80,33 @@ public class VaultsRepository
       throw new Exception("More than 1 vault was deleted not very good at all!");
     }
   }
+
+  internal List<Vault> GetProfileVaults(string profileId)
+  {
+    string sql = @"
+    SELECT * FROM vaults
+    JOIN accounts ON accounts.id = vaults.creatorId
+    WHERE vaults.creatorId = @profileId AND isPrivate = false
+    ;";
+
+    return _db.Query(sql, (Vault v, Profile p) =>
+    {
+      v.Creator = p;
+      return v;
+    }, new { profileId }).ToList();
+  }
+
+  internal List<Vault> GetAccountVaults(string accountId)
+  {
+    string sql = @"
+    SELECT * FROM vaults
+    JOIN accounts ON accounts.id = vaults.creatorId
+    WHERE vaults.creatorId = @accountId;";
+
+    return _db.Query(sql, (Vault v, Profile p) =>
+    {
+      v.Creator = p;
+      return v;
+    }, new { accountId }).ToList();
+  }
 }

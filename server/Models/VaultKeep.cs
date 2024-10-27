@@ -17,7 +17,7 @@ public class VaultKeep : IRepoItem<int>
   public string CreatorId { get; set; }
 }
 
-public class VaultKeepProfile : Profile
+public class VaultKeepKeep : Keep
 {
   public int VaultKeepId { get; set; }
 }

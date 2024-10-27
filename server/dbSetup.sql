@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS accounts (
     picture varchar(255) COMMENT 'User Picture'
 ) default charset utf8mb4 COMMENT '';
 
+SELECT * FROM accounts;
+
 -- Accounts END --
 
 -- Keeps START --
@@ -31,12 +33,10 @@ SELECT *
 FROM keeps
     JOIN accounts ON accounts.id = keeps.creatorId
 WHERE
-    keeps.id = 1;
+    keeps.`creatorId` = '66f584ad3db49ae2a611309b';
 
 -- Keeps END --
-
 -- Vaults --
-
 CREATE TABLE vaults (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -49,11 +49,14 @@ CREATE TABLE vaults (
     FOREIGN KEY (creatorId) REFERENCES accounts (id) ON DELETE CASCADE
 )
 
-SELECT * FROM vaults;
-
--- Vaults --
-
--- VaultKeep --
+SELECT *
+FROM vaults
+    JOIN accounts ON accounts.id = vaults.creatorId
+WHERE
+    vaults.creatorId = '66f584ad3db49ae2a611309b'
+    AND isPrivate = false
+    -- Vaults --
+    -- VaultKeep --
 
 CREATE TABLE vault_keeps (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -67,5 +70,9 @@ CREATE TABLE vault_keeps (
     FOREIGN KEY (creatorId) REFERENCES accounts (id) ON DELETE CASCADE
 )
 
-SELECT * FROM vault_keeps
+-- Not sure if this what the test wants
+SELECT keepId, COUNT(*) AS kept FROM vault_keeps GROUP BY keepId;
+
+SELECT * FROM vault_keeps;
+
 -- VaultKeep --

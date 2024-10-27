@@ -32,7 +32,7 @@ public class KeepsService
   internal Keep UpdateKeep(string userId, int keepId, KeepCreationDTO keepData)
   {
     Keep keep = GetSpecificKeep(keepId);
-    if (keep.CreatorId != userId) throw new Exception("You update something that isn't yours");
+    if (keep.CreatorId != userId) throw new Exception("You cannot update something that isn't yours");
     keep.Name = keepData.Name ?? keep.Name;
     keep.Description = keepData.Description ?? keep.Description;
     keep.Img = keepData.Img ?? keep.Img;
@@ -46,5 +46,10 @@ public class KeepsService
 
     _repository.DeleteKeep(keepId);
     return $"{keep.Name} successfully deleted";
+  }
+
+  internal List<Keep> GetProfileKeeps(string profileId)
+  {
+    return _repository.GetProfileKeeps(profileId);
   }
 }
