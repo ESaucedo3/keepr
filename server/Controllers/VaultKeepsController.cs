@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http.HttpResults;
-
 namespace keepr.Controllers;
 
 [ApiController, Route("api/[controller]")]

@@ -1,6 +1,4 @@
--- NOTE | To acquire keptCount use the many to many which is vaultKeeps to acquire the value and also use COUNT may need to come back to keeps table later on
-
--- Accounts START --
+-- All that's left is stretch goals which involves kept virtual property | keeps and vault_keeps will be needed.
 
 CREATE TABLE IF NOT EXISTS accounts (
     id VARCHAR(255) NOT NULL primary key COMMENT 'primary key',
@@ -13,9 +11,7 @@ CREATE TABLE IF NOT EXISTS accounts (
 
 SELECT * FROM accounts;
 
--- Accounts END --
-
--- Keeps START --
+DROP TABLE keeps;
 
 CREATE TABLE keeps (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -24,19 +20,15 @@ CREATE TABLE keeps (
     name VARCHAR(255) NOT NULL,
     description VARCHAR(1000) NOT NULL,
     img VARCHAR(1000) NOT NULL,
-    views INT UNSIGNED NOT NULL,
+    views INT UNSIGNED NOT NULL DEFAULT 0,
     creatorId VARCHAR(255) NOT NULL,
     FOREIGN KEY (creatorId) REFERENCES accounts (id) ON DELETE CASCADE
-)
+);
 
-SELECT *
-FROM keeps
-    JOIN accounts ON accounts.id = keeps.creatorId
-WHERE
-    keeps.`creatorId` = '66f584ad3db49ae2a611309b';
+SELECT * FROM keeps;
 
--- Keeps END --
--- Vaults --
+DROP TABLE vaults;
+
 CREATE TABLE vaults (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -47,16 +39,11 @@ CREATE TABLE vaults (
     isPrivate BOOLEAN NOT NULL DEFAULT false,
     creatorId VARCHAR(255) NOT NULL,
     FOREIGN KEY (creatorId) REFERENCES accounts (id) ON DELETE CASCADE
-)
+);
 
-SELECT *
-FROM vaults
-    JOIN accounts ON accounts.id = vaults.creatorId
-WHERE
-    vaults.creatorId = '66f584ad3db49ae2a611309b'
-    AND isPrivate = false
-    -- Vaults --
-    -- VaultKeep --
+SELECT * FROM vaults;
+
+DROP TABLE vault_keeps;
 
 CREATE TABLE vault_keeps (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -69,10 +56,18 @@ CREATE TABLE vault_keeps (
     FOREIGN KEY (vaultId) REFERENCES vaults (id) ON DELETE CASCADE,
     FOREIGN KEY (creatorId) REFERENCES accounts (id) ON DELETE CASCADE
 )
+-- Not sure if this what the test wants | Still not sure
+SELECT keepId, COUNT(*) AS kept
+FROM vault_keeps
+GROUP BY
+    keepId;
 
--- Not sure if this what the test wants
-SELECT keepId, COUNT(*) AS kept FROM vault_keeps GROUP BY keepId;
+SELECT vault_keeps.*, keeps.*, COUNT(vault_keeps.keepId) AS kept, accounts.*
+FROM
+    vault_keeps
+    JOIN keeps ON keeps.id = vault_keeps.keepId
+    JOIN accounts ON accounts.id = vault_keeps.creatorId
+GROUP BY
+    vault_keeps.id
 
 SELECT * FROM vault_keeps;
-
--- VaultKeep --

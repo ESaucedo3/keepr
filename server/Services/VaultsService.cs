@@ -1,5 +1,3 @@
-
-
 namespace keepr.Services;
 public class VaultsService
 {
@@ -37,7 +35,13 @@ public class VaultsService
   {
     Vault vault = _repository.GetSpecificVault(vaultId);
     if (vault == null) throw new Exception($"Invalid ID: {vaultId}");
-    else if (vault.IsPrivate == true) throw new Exception("This vault is currently private access denied!");
+    return vault;
+  }
+
+  internal Vault GetSpecificVault(int vaultId, string userId)
+  {
+    Vault vault = GetSpecificVault(vaultId);
+    if (vault.IsPrivate && vault.CreatorId != userId) throw new Exception("Vault is currently private only creator may gain access to it!");
     return vault;
   }
 
