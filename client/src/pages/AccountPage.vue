@@ -56,8 +56,9 @@ async function getAccountVaults() {
             <img class="vault-img" :src="accountVault.imgUrl" alt="">
           </div>
         </div>
+        <h3 class="ms-1 mt-4">Keeps</h3>
+        <KeepsMasonry />
       </div>
-      <KeepsMasonry />
     </div>
   </section>
   <div v-else>

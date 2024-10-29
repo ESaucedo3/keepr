@@ -3,6 +3,16 @@ import {AppState} from '@/AppState.js';
 import {Keep} from '@/models/Keep.js';
 
 class KeepsService {
+  async deleteKeep(keepId) {
+    await api.delete(`api/keeps/${keepId}`);
+    const keepIndex = AppState.keeps.findIndex((keep) => keep.id === keepId);
+    AppState.keeps.splice(keepIndex, 1);
+  }
+  async createKeep(keepData) {
+    const response = await api.post('api/keeps', keepData);
+    const createdKeep = new Keep(response.data);
+    AppState.keeps.push(createdKeep);
+  }
   async getAllKeeps() {
     const response = await api.get('api/keeps');
     AppState.keeps = response.data.map((keep) => new Keep(keep));

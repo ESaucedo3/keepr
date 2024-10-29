@@ -79,3 +79,7 @@ SELECT * FROM keeps WHERE `creatorId` = '66f584ad3db49ae2a611309b'
 SELECT * FROM keeps JOIN accounts ON accounts.id = keeps.`creatorId`;
 
 SELECT * FROM accounts;
+
+SELECT * FROM keeps;
+
+DELETE FROM keeps WHERE id = 30;
