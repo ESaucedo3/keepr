@@ -1,5 +1,7 @@
 <script setup>
+import { useRoute } from 'vue-router';
 import Login from './Login.vue';
+const route = useRoute();
 </script>
 
 <template>
@@ -16,10 +18,12 @@ import Login from './Login.vue';
           Create
         </button>
         <ul class="dropdown-menu">
-          <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#new-keep">New
+          <li><button class="dropdown-item" type="button" data-bs-toggle="modal"
+              data-bs-target="#create-update-keep">New
               Keep</button>
           </li>
-          <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#new-vault">New
+          <li v-if="route.name === 'Account'"><button class="dropdown-item" type="button" data-bs-toggle="modal"
+              data-bs-target="#create-update-vault">New
               Vault</button></li>
         </ul>
       </div>

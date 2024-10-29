@@ -5,9 +5,11 @@ import { vaultsService } from '@/services/VaultsService.js';
 import { logger } from '@/utils/Logger.js';
 import Pop from '@/utils/Pop.js';
 import KeepsMasonry from '@/components/KeepsMasonry.vue';
+import KeeprVaults from '@/components/KeeprVaults.vue';
 
 const account = computed(() => AppState.account);
-const accountVaults = computed(() => AppState.accountVaults);
+const vaults = computed(() => AppState.vaults);
+const keeps = computed(() => AppState.keeps);
 
 onMounted(() => getAccountVaults());
 
@@ -44,18 +46,14 @@ async function getAccountVaults() {
 
           <div class="text-center">
             <h3>{{ account.name }}</h3>
-            <p>2 vaults | 2 keeps</p>
+            <p>{{ vaults.length }} Vaults | {{ keeps.length }} Keeps </p>
           </div>
         </div>
-
       </div>
-      <div v-if="accountVaults" class="col-md-9 mx-auto">
+      <div v-if="vaults && keeps" class="col-md-9 mx-auto">
         <h3 class="ms-1">Vaults</h3>
-        <div class="row gy-3">
-          <div v-for="accountVault in accountVaults" :key="accountVault.id" class="col-md-3">
-            <img class="vault-img" :src="accountVault.imgUrl" alt="">
-          </div>
-        </div>
+        <KeeprVaults />
+
         <h3 class="ms-1 mt-4">Keeps</h3>
         <KeepsMasonry />
       </div>
@@ -90,25 +88,5 @@ async function getAccountVaults() {
   border-radius: 50%;
   border: 2px solid midnightblue;
   padding: .2rem .5rem .2rem .5rem;
-}
-
-.vault-img {
-  aspect-ratio: 1/1;
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  object-position: center;
-}
-
-.masonry-design {
-  max-width: 100%;
-  columns: 4 300px;
-  column-gap: 1em;
-
-  & img {
-    width: 100%;
-    display: block;
-    margin-bottom: 1em;
-  }
 }
 </style>

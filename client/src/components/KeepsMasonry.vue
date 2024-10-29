@@ -7,6 +7,7 @@ import ModalWrapper from './ModalWrapper.vue';
 import KeepModal from './KeepModal.vue';
 import { logger } from '@/utils/Logger.js';
 import Pop from '@/utils/Pop.js';
+import CreateUpdateKeepModal from './CreateUpdateKeepModal.vue';
 
 const route = useRoute();
 const account = computed(() => AppState.account);
@@ -49,8 +50,12 @@ async function deleteKeep(keepId) {
 }
 
 const selectedKeep = ref(null);
+const keepToUpdate = ref(null);
 const openKeepDetailsModal = (keep) => {
   selectedKeep.value = keep;
+}
+const openUpdateKeepModal = (keep) => {
+  keepToUpdate.value = keep;
 }
 </script>
 
@@ -71,13 +76,17 @@ const openKeepDetailsModal = (keep) => {
       </div>
       <button @click="openKeepDetailsModal(keep)" class="position-absolute top-0 start-0 w-100 h-100 special-keep-btn"
         type="button" data-bs-toggle="modal" data-bs-target="#keep-details"></button>
-      <button v-if="keep.creatorId === account?.id" class="position-absolute update-keep-btn" type="button"><i
-          class="fa-solid fa-pen" style="color: #1b96fa;"></i></button>
+      <button @click="openUpdateKeepModal(keep)" v-if="keep.creatorId === account?.id"
+        class="position-absolute update-keep-btn" type="button"><i class="fa-solid fa-pen" style="color: #1b96fa;"
+          data-bs-toggle="modal" data-bs-target="#create-update-keep"></i></button>
       <button @click="deleteKeep(keep.id)" v-if="keep.creatorId === account?.id"
         class="position-absolute delete-keep-btn" type="button"><i class="fa-solid fa-x"
           style="color: #ff3333;"></i></button>
     </div>
   </div>
+  <ModalWrapper id="create-update-keep">
+    <CreateUpdateKeepModal :keepProp="keepToUpdate" @closed-edit-modal="keepToUpdate = null" />
+  </ModalWrapper>
   <ModalWrapper id="keep-details">
     <KeepModal v-if="selectedKeep" :keepProp="selectedKeep" :accountProp="account" />
   </ModalWrapper>

@@ -1,8 +1,5 @@
 <script setup>
-import ModalWrapper from './components/ModalWrapper.vue';
 import Navbar from './components/Navbar.vue';
-import NewKeepModal from './components/NewKeepModal.vue';
-import NewVaultModal from './components/NewVaultModal.vue';
 
 </script>
 
@@ -13,12 +10,6 @@ import NewVaultModal from './components/NewVaultModal.vue';
   <main>
     <router-view />
   </main>
-  <ModalWrapper id="new-keep">
-    <NewKeepModal />
-  </ModalWrapper>
-  <ModalWrapper id="new-vault">
-    <NewVaultModal />
-  </ModalWrapper>
 </template>
 
 <style lang="scss">
