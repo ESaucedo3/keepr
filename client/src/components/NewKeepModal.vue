@@ -1,5 +1,13 @@
 <script setup>
+import { ref } from 'vue';
 
+const editableKeepData = ref({
+
+})
+
+async function createKeep() {
+
+}
 </script>
 
 

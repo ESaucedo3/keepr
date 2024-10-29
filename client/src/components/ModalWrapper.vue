@@ -7,7 +7,7 @@ defineProps({ modalId: String })
 
 <template>
   <div class="modal fade" :id="modalId">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
       <div class="modal-content">
         <div class="modal-body">
           <slot></slot>

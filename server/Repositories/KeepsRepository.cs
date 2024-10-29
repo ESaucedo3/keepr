@@ -46,11 +46,16 @@ public class KeepsRepository
     string sql = @"
     UPDATE keeps SET views = views + 1 WHERE keeps.id = @keepId;
     
-    SELECT * 
+    SELECT 
+      keeps.*,
+      COUNT(vault_keeps.keepId) AS kept,
+      accounts.*
     FROM keeps
-    JOIN accounts ON accounts.id = keeps.creatorId
-    WHERE keeps.id = @keepId;
-    ;";
+      JOIN accounts ON accounts.id = keeps.creatorId
+      LEFT OUTER JOIN vault_keeps ON vault_keeps.keepId = keeps.id
+    WHERE keeps.id = @keepId
+    GROUP BY
+      keeps.id;";
 
     return _db.Query(sql, (Keep k, Profile p) =>
     {

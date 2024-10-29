@@ -1,4 +1,4 @@
--- All that's left is stretch goals which involves kept virtual property | keeps and vault_keeps will be needed.
+-- For kept still needs some updating since kept isnt really updating when it should be
 
 CREATE TABLE IF NOT EXISTS accounts (
     id VARCHAR(255) NOT NULL primary key COMMENT 'primary key',
@@ -67,7 +67,15 @@ FROM
     vault_keeps
     JOIN keeps ON keeps.id = vault_keeps.keepId
     JOIN accounts ON accounts.id = vault_keeps.creatorId
+WHERE
+    vault_keeps.id = LAST_INSERT_ID()
 GROUP BY
-    vault_keeps.id
+    vault_keeps.id;
 
 SELECT * FROM vault_keeps;
+
+SELECT * FROM keeps WHERE `creatorId` = '66f584ad3db49ae2a611309b'
+
+SELECT * FROM keeps JOIN accounts ON accounts.id = keeps.`creatorId`;
+
+SELECT * FROM accounts;

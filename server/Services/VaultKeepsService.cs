@@ -3,11 +3,13 @@ public class VaultKeepsService
 {
   private readonly VaultKeepsRepository _repository;
   private readonly VaultsService _vaultsService;
+  private readonly KeepsService _keepsService;
 
-  public VaultKeepsService(VaultKeepsRepository repository, VaultsService vaultsService)
+  public VaultKeepsService(VaultKeepsRepository repository, VaultsService vaultsService, KeepsService keepsService)
   {
     _repository = repository;
     _vaultsService = vaultsService;
+    _keepsService = keepsService;
   }
 
   internal VaultKeep CreateVaultKeep(string userId, VaultKeepCreationDTO vaultKeepData)

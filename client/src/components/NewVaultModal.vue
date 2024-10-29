@@ -12,23 +12,23 @@
         </div>
         <h4>Add your vault</h4>
         <form class="mt-4" @submit.prevent="">
-          <div class="mb-2">
+          <div class="mb-3">
             <input class="form-control" placeholder="Title..." required>
           </div>
-          <div class="mb-2">
+          <div class="mb-3">
             <input class="form-control" type="url" name="keepImgUrl" id="keepImgUrl" placeholder="Image URL..."
               required>
           </div>
-          <div class="mb-2">
-            <div class="d-flex flex-column">
-              <p>Private Vaults can only be seen by you</p>
+          <div class="mb-3">
+            <div class="d-flex flex-column align-items-end">
+              <p class="m-0">Private Vaults can only be seen by you</p>
               <div class="d-flex">
-                <input class="form-check-input" type="checkbox" name="vaultPrivate" id="vaultPrivate">
+                <input class="form-check-input selectable" type="checkbox" name="vaultPrivate" id="vaultPrivate">
                 <label class="form-label m-0 ms-1" for="vaultPrivate">Make Vault Private?</label>
               </div>
             </div>
           </div>
-          <div class="text-end">
+          <div class="text-end mb-3">
             <button class="btn btn-outline-dark rounded">Create Vault</button>
           </div>
         </form>
