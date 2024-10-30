@@ -1,23 +1,73 @@
 <script setup>
+import { AppState } from '@/AppState.js';
 import { Account } from '@/models/Account.js';
 import { Keep } from '@/models/Keep.js';
 import { keepsService } from '@/services/KeepsService.js';
-import { ref, watch } from 'vue';
+import { vaultKeepsService } from '@/services/VaultKeepsService.js';
+import { vaultsService } from '@/services/VaultsService.js';
+import { logger } from '@/utils/Logger.js';
+import Pop from '@/utils/Pop.js';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const vaults = computed(() => AppState.vaults);
 
 const props = defineProps({
   accountProp: { type: Account },
   keepProp: { type: Keep, required: true },
 })
 
+const createVaultKeepData = ref({
+  keepId: null,
+  vaultId: null
+});
+
+onMounted(() => {
+  if (route.name === 'Home') {
+    getAccountVaults();
+  }
+})
+
 watch(() => props.keepProp, () => {
   incrementKeepViewCount();
+  createVaultKeepData.value.keepId = props.keepProp?.id;
 }, { immediate: true });
-
-const vaultSelected = ref('');
 
 async function incrementKeepViewCount() {
   await keepsService.getSpecificKeep(props.keepProp.id);
 }
+
+async function getAccountVaults() {
+  try {
+    logger.log("Getting vaults because you are signed in")
+    await vaultsService.getAccountVaults();
+  }
+  catch (error) {
+    Pop.error(error);
+  }
+}
+
+async function createVaultKeep() {
+  try {
+    await vaultKeepsService.createVaultKeep(createVaultKeepData);
+  }
+  catch (e) {
+    Pop.error(e);
+    logger.error(e);
+  }
+}
+
+async function deleteVaultKeep(params) {
+  try {
+    logger.log("Deleting vault keep by it's id")
+  }
+  catch (e) {
+    Pop.error(e);
+    logger.error(e);
+  }
+}
+
 </script>
 
 <template>
@@ -41,12 +91,14 @@ async function incrementKeepViewCount() {
           </div>
 
           <div class="d-flex justify-content-between w-100">
-            <form v-if="accountProp" class="align-self-end" @submit.prevent="">
-              <select class="form-select" name="vaultSelect" id="vaultSelect">
-                <option disabled selected value="">Select a vault</option>
-                <option value=""></option>
-              </select>
-              <button v-if="vaultSelected !== ''" class="btn btn-outline-dark rounded">Save</button>
+            <form v-if="accountProp" class="align-self-end" @submit.prevent="createVaultKeep()">
+              <div class="d-flex">
+                <select v-model="createVaultKeepData.vaultId" class="form-select" name="vaultSelect" id="vaultSelect">
+                  <option disabled selected value="">Select a vault</option>
+                  <option v-for="vault in vaults" :key="vault.id" :value="vault.id">{{ vault.name }}</option>
+                </select>
+                <button v-if="createVaultKeepData.vaultId" class="btn btn-outline-dark rounded ms-3">Save</button>
+              </div>
             </form>
             <div class="ms-auto">
               <RouterLink :to="{ name: 'Account' }" :title="`Go to ${keepProp.creator.name}'s profile`">

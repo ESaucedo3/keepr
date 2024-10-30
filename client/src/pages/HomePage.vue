@@ -1,5 +1,5 @@
 <script setup>
-import KeepsMasonry from '@/components/KeepsMasonry.vue';
+import KeepCard from '@/components/KeepCard.vue';
 
 </script>
 
@@ -7,7 +7,7 @@ import KeepsMasonry from '@/components/KeepsMasonry.vue';
   <section class="container-fluid">
     <div class="row">
       <div class="col-md-10 mx-auto">
-        <KeepsMasonry />
+        <KeepCard />
       </div>
     </div>
   </section>

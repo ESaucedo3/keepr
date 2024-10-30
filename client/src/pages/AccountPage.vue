@@ -4,8 +4,8 @@ import { AppState } from '../AppState.js';
 import { vaultsService } from '@/services/VaultsService.js';
 import { logger } from '@/utils/Logger.js';
 import Pop from '@/utils/Pop.js';
-import KeepsMasonry from '@/components/KeepsMasonry.vue';
-import KeeprVaults from '@/components/KeeprVaults.vue';
+import VaultCard from '@/components/VaultCard.vue';
+import KeepCard from '@/components/KeepCard.vue';
 
 const account = computed(() => AppState.account);
 const vaults = computed(() => AppState.vaults);
@@ -52,10 +52,10 @@ async function getAccountVaults() {
       </div>
       <div v-if="vaults && keeps" class="col-md-9 mx-auto">
         <h3 class="ms-1">Vaults</h3>
-        <KeeprVaults />
+        <VaultCard />
 
         <h3 class="ms-1 mt-4">Keeps</h3>
-        <KeepsMasonry />
+        <KeepCard />
       </div>
     </div>
   </section>

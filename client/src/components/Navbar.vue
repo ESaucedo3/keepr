@@ -1,7 +1,10 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import Login from './Login.vue';
+import { computed } from 'vue';
+import { AppState } from '@/AppState.js';
 const route = useRoute();
+const account = computed(() => AppState.account);
 </script>
 
 <template>
@@ -13,7 +16,7 @@ const route = useRoute();
         </router-link>
       </div>
 
-      <div class="dropend">
+      <div v-if="account" class="dropend">
         <button class="btn border-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
           Create
         </button>
