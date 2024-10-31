@@ -5,12 +5,18 @@ import { keepsService } from '@/services/KeepsService.js';
 import { vaultsService } from '@/services/VaultsService.js';
 import { logger } from '@/utils/Logger.js';
 import Pop from '@/utils/Pop.js';
-import { computed, onMounted, watch } from 'vue';
+import { Modal } from 'bootstrap';
+import { computed, onMounted, onUnmounted, watch } from 'vue';
+import { onBeforeRouteLeave } from 'vue-router';
 
 const account = computed(() => AppState.account);
 const keeps = computed(() => AppState.keeps);
 
 onMounted(() => getAllKeeps());
+
+onBeforeRouteLeave(() => {
+  Modal.getOrCreateInstance('#keep-details').hide();
+})
 
 watch(() => account.value, (loggedIn) => {
   if (loggedIn) {

@@ -56,7 +56,7 @@ async function createVault() {
       isPrivate: false,
       img: ''
     }
-    Modal.getInstance("#create-update-vault").hide();
+    Modal.getOrCreateInstance("#create-update-vault").hide();
   }
   catch (e) {
     Pop.error(e);
@@ -68,9 +68,9 @@ async function updateVault() {
   try {
     const confirmed = await Pop.confirm("Confirm Changes?");
     if (!confirmed) return;
+    Modal.getOrCreateInstance('#create-update-vault').hide();
     await vaultsService.updateVault(props.vaultProp.id, updateVaultData.value);
     Pop.toast("Vault updated successfully!", "success", "top");
-    Modal.getInstance('#create-update-vault').hide();
   }
   catch (e) {
     Pop.error(e);

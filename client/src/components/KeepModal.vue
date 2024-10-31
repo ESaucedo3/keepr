@@ -36,7 +36,7 @@ async function deleteVaultKeep(keepId, vaultKeepId) {
   if (!confirmed) return;
   await vaultKeepsService.deleteVaultKeep(keepId, vaultKeepId);
   Pop.toast("Vault Keep successfully deleted", "success", "top");
-  Modal.getInstance("#keep-details").hide();
+  Modal.getOrCreateInstance("#keep-details").hide();
 }
 
 </script>

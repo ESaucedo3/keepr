@@ -53,7 +53,7 @@ async function createKeep() {
       img: '',
       description: ''
     }
-    Modal.getInstance('#create-update-keep').hide();
+    Modal.getOrCreateInstance('#create-update-keep').hide();
   }
   catch (e) {
     Pop.error(e);
@@ -67,7 +67,7 @@ async function updateKeep() {
     if (!confirmed) return;
     await keepsService.updateKeep(props.keepProp.id, updatableKeepData.value);
     Pop.toast("Keep updated successfully!", "success", "top");
-    Modal.getInstance('#create-update-keep').hide();
+    Modal.getOrCreateInstance('#create-update-keep').hide();
   }
   catch (e) {
     Pop.error(e);

@@ -9,6 +9,7 @@ import CreateUpdateKeepModal from './CreateUpdateKeepModal.vue';
 import { useRoute } from 'vue-router';
 import { vaultKeepsService } from '@/services/VaultKeepsService.js';
 import KeepModal from './KeepModal.vue';
+import { Modal } from 'bootstrap';
 
 const route = useRoute();
 const account = computed(() => AppState.account);
@@ -18,6 +19,7 @@ const vaultKeeps = computed(() => AppState.vaultKeeps);
 async function getSpecificKeep(keepId) {
   try {
     await keepsService.getSpecificKeep(keepId);
+    Modal.getOrCreateInstance("#keep-details").show();
   }
   catch (e) {
     Pop.error(e);
@@ -28,6 +30,7 @@ async function getSpecificKeep(keepId) {
 async function getSpecificVaultKeep(vaultKeep) {
   try {
     await vaultKeepsService.getSpecificVaultKeep(vaultKeep);
+    Modal.getOrCreateInstance("#keep-details").show();
   }
   catch (e) {
     Pop.error(e);
@@ -51,6 +54,7 @@ async function deleteKeep(keepId) {
 const keepToUpdate = ref(null);
 const openUpdateKeepModal = (keep) => {
   keepToUpdate.value = keep;
+  Modal.getOrCreateInstance("#create-update-keep").show();
 }
 </script>
 
@@ -72,10 +76,10 @@ const openUpdateKeepModal = (keep) => {
 
 
       <button class="position-absolute top-0 start-0 w-100 h-100 special-keep-btn" @click="getSpecificKeep(keep.id)"
-        type="button" data-bs-toggle="modal" data-bs-target="#keep-details"></button>
+        type="button"></button>
       <button @click="openUpdateKeepModal(keep)" v-if="keep.creatorId === account?.id"
-        class="position-absolute update-keep-btn" type="button"><i class="fa-solid fa-pen" style="color: #1b96fa;"
-          data-bs-toggle="modal" data-bs-target="#create-update-keep"></i></button>
+        class="position-absolute update-keep-btn" type="button"><i class="fa-solid fa-pen"
+          style="color: #1b96fa;"></i></button>
       <button @click="deleteKeep(keep.id)" v-if="keep.creatorId === account?.id"
         class="position-absolute delete-keep-btn" type="button"><i class="fa-solid fa-x"
           style="color: #ff3333;"></i></button>
@@ -96,8 +100,7 @@ const openUpdateKeepModal = (keep) => {
       </div>
 
       <button class="position-absolute top-0 start-0 w-100 h-100 special-keep-btn"
-        @click="getSpecificVaultKeep(vaultKeep)" type="button" data-bs-toggle="modal"
-        data-bs-target="#keep-details"></button>
+        @click="getSpecificVaultKeep(vaultKeep)" type="button"></button>
     </div>
   </div>
   <ModalWrapper id="create-update-keep">

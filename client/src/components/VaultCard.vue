@@ -6,6 +6,7 @@ import { AppState } from '@/AppState.js';
 import Pop from '@/utils/Pop.js';
 import { logger } from '@/utils/Logger.js';
 import { vaultsService } from '@/services/VaultsService.js';
+import { Modal } from 'bootstrap';
 
 const account = computed(() => AppState.account);
 const vaults = computed(() => AppState.vaults);
@@ -26,6 +27,7 @@ async function deleteVault(vaultId) {
 const vaultToUpdate = ref(null);
 const openUpdateVaultModal = (vault) => {
   vaultToUpdate.value = vault
+  Modal.getOrCreateInstance("#create-update-vault").show();
 }
 </script>
 
@@ -41,9 +43,8 @@ const openUpdateVaultModal = (vault) => {
         <div v-if="vault.creatorId === account?.id"
           class="position-absolute start-0 end-0 top-0 d-flex justify-content-between pt-1 px-1">
           <div class="special-vault-btn">
-            <button @click="openUpdateVaultModal(vault)" class="update-vault-btn" data-bs-toggle="modal"
-              data-bs-target="#create-update-vault" type="button"><i class="fa-solid fa-pen"
-                style="color: #1b96fa;"></i></button>
+            <button @click="openUpdateVaultModal(vault)" class="update-vault-btn" type="button"><i
+                class="fa-solid fa-pen" style="color: #1b96fa;"></i></button>
           </div>
           <div class="special-vault-btn">
             <button @click="deleteVault(vault.id)" class="delete-vault-btn" type="button"><i class="fa-solid fa-x"

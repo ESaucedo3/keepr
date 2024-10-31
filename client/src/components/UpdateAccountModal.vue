@@ -44,7 +44,7 @@ async function updateAccount() {
         <input v-model="editableAccountData.coverImg" class="form-control" type="url" name="accountCoverImg"
           id="accountCoverImg" placeholder="Cover Image" required>
       </div>
-      <div class="text-end">
+      <div class="text-end mb-2">
         <button class="btn btn-outline-dark">Update</button>
       </div>
     </form>

@@ -3,8 +3,17 @@ import { useRoute } from 'vue-router';
 import Login from './Login.vue';
 import { computed } from 'vue';
 import { AppState } from '@/AppState.js';
+import { Modal } from 'bootstrap';
 const route = useRoute();
 const account = computed(() => AppState.account);
+
+function openCreateKeepModal() {
+  Modal.getOrCreateInstance("#create-update-keep").show();
+}
+
+function openUpdateVaultModal() {
+  Modal.getOrCreateInstance("#create-update-vault").show();
+}
 </script>
 
 <template>
@@ -23,11 +32,11 @@ const account = computed(() => AppState.account);
         </button>
         <ul class="dropdown-menu">
           <li v-if="route.name === 'Account' || route.name === 'Home'"><button class="dropdown-item" type="button"
-              data-bs-toggle="modal" data-bs-target="#create-update-keep">New
+              @click="openCreateKeepModal()">New
               Keep</button>
           </li>
-          <li v-if="route.name === 'Account'"><button class="dropdown-item" type="button" data-bs-toggle="modal"
-              data-bs-target="#create-update-vault">New
+          <li v-if="route.name === 'Account'"><button class="dropdown-item" type="button"
+              @click="openUpdateVaultModal()">New
               Vault</button></li>
         </ul>
       </div>
