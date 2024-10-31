@@ -1,6 +1,5 @@
 <script setup>
 import KeepCard from '@/components/KeepCard.vue';
-
 </script>
 
 <template>

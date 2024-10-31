@@ -7,8 +7,9 @@ import { vaultKeepsService } from '@/services/VaultKeepsService.js';
 import { vaultsService } from '@/services/VaultsService.js';
 import { logger } from '@/utils/Logger.js';
 import Pop from '@/utils/Pop.js';
+import { Modal } from 'bootstrap';
 import { computed, onMounted, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { onBeforeRouteLeave, useRoute } from 'vue-router';
 
 const route = useRoute();
 const vaults = computed(() => AppState.vaults);
@@ -27,6 +28,10 @@ onMounted(() => {
   if (route.name === 'Home') {
     getAccountVaults();
   }
+})
+
+onBeforeRouteLeave(() => {
+  Modal.getInstance("#keep-details").hide();
 })
 
 watch(() => props.keepProp, () => {
@@ -50,17 +55,8 @@ async function getAccountVaults() {
 
 async function createVaultKeep() {
   try {
-    await vaultKeepsService.createVaultKeep(createVaultKeepData);
-  }
-  catch (e) {
-    Pop.error(e);
-    logger.error(e);
-  }
-}
-
-async function deleteVaultKeep(params) {
-  try {
-    logger.log("Deleting vault keep by it's id")
+    await vaultKeepsService.createVaultKeep(createVaultKeepData.value);
+    Pop.toast("VaultKeep created successfully!", "success", "top");
   }
   catch (e) {
     Pop.error(e);
@@ -91,7 +87,7 @@ async function deleteVaultKeep(params) {
           </div>
 
           <div class="d-flex justify-content-between w-100">
-            <form v-if="accountProp" class="align-self-end" @submit.prevent="createVaultKeep()">
+            <form v-if="route.name !== 'Profile'" class="align-self-end" @submit.prevent="createVaultKeep()">
               <div class="d-flex">
                 <select v-model="createVaultKeepData.vaultId" class="form-select" name="vaultSelect" id="vaultSelect">
                   <option disabled selected value="">Select a vault</option>
@@ -101,7 +97,15 @@ async function deleteVaultKeep(params) {
               </div>
             </form>
             <div class="ms-auto">
-              <RouterLink :to="{ name: 'Account' }" :title="`Go to ${keepProp.creator.name}'s profile`">
+              <RouterLink v-if="accountProp?.id === keepProp.creatorId" :to="{ name: 'Account' }"
+                :title="`Go to ${keepProp.creator.name}'s profile`">
+                <div class="d-flex align-items-center">
+                  <img class="creator-img" :src="keepProp.creator.picture" :alt="keepProp.creator.name">
+                  <p class="m-0 ms-2">{{ keepProp.creator.name }}</p>
+                </div>
+              </RouterLink>
+              <RouterLink v-else :to="{ name: 'Profile', params: { profileId: keepProp.creatorId } }"
+                :title="`Go to ${keepProp.creator.name}'s profile`">
                 <div class="d-flex align-items-center">
                   <img class="creator-img" :src="keepProp.creator.picture" :alt="keepProp.creator.name">
                   <p class="m-0 ms-2">{{ keepProp.creator.name }}</p>

@@ -21,10 +21,6 @@ async function getKeeps() {
       logger.log("Retreiving everyone's keeps");
       await keepsService.getAllKeeps();
     }
-    else if (route.name === 'Profile') {
-      logger.log("Retreiving specific user's keeps");
-      await keepsService.getUserKeeps();
-    }
     else if (route.name === 'Account') {
       logger.log("Retreiving your keeps");
       await keepsService.getAccountKeeps(account.value.id);
@@ -88,6 +84,9 @@ const openUpdateKeepModal = (keep) => {
     <CreateUpdateKeepModal :keepProp="keepToUpdate" @closed-edit-modal="keepToUpdate = null" />
   </ModalWrapper>
   <ModalWrapper id="keep-details">
+    <div v-if="selectedKeep" class="position-fixed top-0 right-0 bg-dark text-light">
+      {{ selectedKeep?.name }} {{ selectedKeep.kept }} 🎈
+    </div>
     <KeepModal v-if="selectedKeep" :keepProp="selectedKeep" :accountProp="account" />
   </ModalWrapper>
 </template>

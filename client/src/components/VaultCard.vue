@@ -1,7 +1,7 @@
 <script setup>
 import ModalWrapper from './ModalWrapper.vue';
 import CreateUpdateVaultModal from './CreateUpdateVaultModal.vue';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { AppState } from '@/AppState.js';
 import Pop from '@/utils/Pop.js';
@@ -19,9 +19,6 @@ async function getVaults() {
     if (route.name === 'Account') {
       logger.log("Getting your vaults");
       await vaultsService.getAccountVaults();
-    }
-    else if (route.name === 'Profile') {
-      logger.log("Getting user's public vaults")
     }
   }
   catch (e) {
@@ -55,7 +52,9 @@ const openUpdateVaultModal = (vault) => {
     <div v-for="vault in vaults" :key="vault.id" class="col-md-3">
       <div class="position-relative shadow-sm">
         <img class="vault-img" :src="vault.imgUrl" :alt="`${vault.name} Vault`">
-        <!-- NOTE Clicking vault functionality must go here! -->
+        <RouterLink class="position-absolute start-0 top-0 w-100 h-100"
+          :to="{ name: 'Vault', params: { vaultId: vault.id } }">
+        </RouterLink>
         <div v-if="vault.creatorId === account?.id"
           class="position-absolute start-0 end-0 top-0 d-flex justify-content-between pt-1 px-1">
           <div class="special-vault-btn">

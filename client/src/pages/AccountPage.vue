@@ -1,27 +1,14 @@
 <script setup>
-import { computed, onMounted } from 'vue';
+import { computed } from 'vue';
 import { AppState } from '../AppState.js';
-import { vaultsService } from '@/services/VaultsService.js';
-import { logger } from '@/utils/Logger.js';
-import Pop from '@/utils/Pop.js';
 import VaultCard from '@/components/VaultCard.vue';
 import KeepCard from '@/components/KeepCard.vue';
+import ModalWrapper from '@/components/ModalWrapper.vue';
+import UpdateAccountModal from '@/components/UpdateAccountModal.vue';
 
 const account = computed(() => AppState.account);
 const vaults = computed(() => AppState.vaults);
 const keeps = computed(() => AppState.keeps);
-
-onMounted(() => getAccountVaults());
-
-async function getAccountVaults() {
-  try {
-    await vaultsService.getAccountVaults();
-  }
-  catch (e) {
-    Pop.error(e);
-    logger.error(e);
-  }
-}
 
 </script>
 
@@ -39,8 +26,8 @@ async function getAccountVaults() {
             </div>
 
             <div>
-              <button title="Edit Account" class="special-btn mt-1" type="button"><i class="fa-solid fa-pen fa-lg"
-                  style="color: #44a9fb;"></i></button>
+              <button title="Edit Account" class="special-btn mt-1" type="button" data-bs-toggle="modal"
+                data-bs-target="#update-account"><i class="fa-solid fa-pen fa-lg" style="color: #44a9fb;"></i></button>
             </div>
           </div>
 
@@ -58,6 +45,9 @@ async function getAccountVaults() {
         <KeepCard />
       </div>
     </div>
+    <ModalWrapper id="update-account">
+      <UpdateAccountModal />
+    </ModalWrapper>
   </section>
   <div v-else>
     <h1>Loading... <i class="mdi mdi-loading mdi-spin"></i></h1>

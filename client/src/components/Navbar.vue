@@ -17,12 +17,13 @@ const account = computed(() => AppState.account);
       </div>
 
       <div v-if="account" class="dropend">
-        <button class="btn border-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <button v-if="route.name !== 'Profile'" class="btn border-0 dropdown-toggle" type="button"
+          data-bs-toggle="dropdown" aria-expanded="false">
           Create
         </button>
         <ul class="dropdown-menu">
-          <li><button class="dropdown-item" type="button" data-bs-toggle="modal"
-              data-bs-target="#create-update-keep">New
+          <li v-if="route.name === 'Account' || route.name === 'Home'"><button class="dropdown-item" type="button"
+              data-bs-toggle="modal" data-bs-target="#create-update-keep">New
               Keep</button>
           </li>
           <li v-if="route.name === 'Account'"><button class="dropdown-item" type="button" data-bs-toggle="modal"

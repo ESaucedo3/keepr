@@ -3,6 +3,16 @@ import {api} from './AxiosService.js';
 import {Vault} from '@/models/Vault.js';
 
 class VaultsService {
+  async getSpecificVault(vaultId) {
+    AppState.vault = null;
+    const response = await api.get(`api/vaults/${vaultId}`);
+    const vault = new Vault(response.data);
+    AppState.vault = vault;
+  }
+  async getProfileVaults(profileId) {
+    const response = await api.get(`api/profiles/${profileId}/vaults`);
+    AppState.vaults = response.data.map((vault) => new Vault(vault));
+  }
   async createVault(createVaultData) {
     const response = await api.post('api/vaults', createVaultData);
     const createdVault = new Vault(response.data);

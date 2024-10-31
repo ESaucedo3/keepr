@@ -72,4 +72,12 @@ WHERE
 GROUP BY
     vault_keeps.id;
 
-SELECT * FROM vault_keeps;
+SELECT *
+FROM vault_keeps
+    JOIN accounts ON accounts.id = vault_keeps.creatorId
+WHERE
+    vault_keeps.creatorId = "66f584ad3db49ae2a611309b"
+
+SELECT * FROM accounts;
+
+SELECT * FROM vaults WHERE creatorId = '67101eb1422e8c2c9b081a25'
