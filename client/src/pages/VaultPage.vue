@@ -49,8 +49,8 @@ async function getVaultKeeps() {
         <div class="position-relative">
           <img class="vault-img rounded" :src="vault.imgUrl" :alt="vault.name">
           <div class="position-absolute bottom-50 start-0 end-0 text-center text-light">
-            <h4 class="fw-bold">{{ vault.name }}</h4>
-            <p class="fs-4">By {{ vault.creator.name }}</p>
+            <h4 class="fw-bold vault-details-design">{{ vault.name }}</h4>
+            <p class="fs-4 vault-details-design">By {{ vault.creator.name }}</p>
           </div>
           <h4 class="text-center my-2 kp-design rounded">{{ vaultKeeps.length }} Keeps</h4>
         </div>
@@ -105,5 +105,9 @@ async function getVaultKeeps() {
   background-color: rgb(196, 218, 225);
   max-width: fit-content;
   margin: 0 auto
+}
+
+.vault-details-design {
+  text-shadow: 1px 1px 9px black;
 }
 </style>

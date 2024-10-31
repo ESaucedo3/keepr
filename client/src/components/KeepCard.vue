@@ -65,7 +65,7 @@ const openUpdateKeepModal = (keep) => {
       <img class="rounded" :src="keep.imgUrl" :alt="keep.name">
       <div class="position-absolute start-0 end-0 bottom-0 d-flex justify-content-between align-items-end">
         <div class="mb-2 px-3">
-          <h5 class="m-0 fw-bold fs-4 text-light">{{ keep.name }}</h5>
+          <h5 class="m-0 fw-bold fs-4 text-light keep-name-design">{{ keep.name }}</h5>
         </div>
 
         <div class="mb-2 px-3">
@@ -163,5 +163,9 @@ const openUpdateKeepModal = (keep) => {
   margin-right: .3rem;
   margin-top: .3rem;
   right: 0;
+}
+
+.keep-name-design {
+  text-shadow: 1px 1px 9px #333;
 }
 </style>

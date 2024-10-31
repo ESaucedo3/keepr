@@ -58,7 +58,7 @@ async function deleteVaultKeep(keepId, vaultKeepId) {
 
           <div class="details">
             <h4 class="text-center">{{ activeKeep.name }}</h4>
-            <p>{{ activeKeep.description }}</p>
+            <p class="active-keep-description">{{ activeKeep.description }}</p>
           </div>
 
           <div class="d-flex justify-content-between w-100">
@@ -176,5 +176,9 @@ a {
   border: none;
   background: none;
   cursor: pointer;
+}
+
+.active-keep-description {
+  line-height: 2em;
 }
 </style>

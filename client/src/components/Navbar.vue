@@ -64,8 +64,23 @@ nav {
 }
 
 .logo {
-  font-size: 1.5rem;
-  color: #333;
+  font-weight: 370;
+  font-size: 2.1rem;
+  background: linear-gradient(to right, #5850A5 30%, #3AB5CB 60%, #692DB4 90%);
+  background-clip: text;
+  color: transparent;
+  background-size: 500% auto;
+  animation: logoShine 5s ease-in-out infinite alternate;
+}
+
+@keyframes logoShine {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 100% 50%;
+  }
 }
 
 @media (width <=576px) {
