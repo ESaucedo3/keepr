@@ -3,7 +3,7 @@ import { AppState } from '@/AppState.js';
 import { vaultKeepsService } from '@/services/VaultKeepsService.js';
 import { logger } from '@/utils/Logger.js';
 import Pop from '@/utils/Pop.js';
-import Modal from 'bootstrap/js/dist/modal.js';
+import { Modal } from 'bootstrap';
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -34,9 +34,9 @@ async function createVaultKeep() {
 async function deleteVaultKeep(keepId, vaultKeepId) {
   const confirmed = await Pop.confirm("You sure you want to remove this keep from your vault?");
   if (!confirmed) return;
+  Modal.getOrCreateInstance("#keep-details").hide();
   await vaultKeepsService.deleteVaultKeep(keepId, vaultKeepId);
   Pop.toast("Vault Keep successfully deleted", "success", "top");
-  Modal.getOrCreateInstance("#keep-details").hide();
 }
 
 </script>

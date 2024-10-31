@@ -52,7 +52,7 @@ async function getVaultKeeps() {
             <h4 class="fw-bold">{{ vault.name }}</h4>
             <p class="fs-4">By {{ vault.creator.name }}</p>
           </div>
-          <h4 class="text-center my-2">{{ vaultKeeps.length }} Keeps</h4>
+          <h4 class="text-center my-2 kp-design rounded">{{ vaultKeeps.length }} Keeps</h4>
         </div>
       </div>
       <div v-if="vaultKeeps" class="col-md-9 mx-auto">
@@ -98,5 +98,12 @@ async function getVaultKeeps() {
   border: none;
   background: none;
   cursor: pointer;
+}
+
+.kp-design {
+  padding: .6rem;
+  background-color: rgb(196, 218, 225);
+  max-width: fit-content;
+  margin: 0 auto
 }
 </style>
