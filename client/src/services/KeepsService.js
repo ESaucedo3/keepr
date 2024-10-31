@@ -1,7 +1,6 @@
 import {api} from './AxiosService.js';
 import {AppState} from '@/AppState.js';
 import {Keep} from '@/models/Keep.js';
-import {logger} from '@/utils/Logger.js';
 
 class KeepsService {
   async createKeep(createKeepData) {
@@ -14,13 +13,11 @@ class KeepsService {
     AppState.keeps = response.data.map((keep) => new Keep(keep));
   }
   async getSpecificKeep(keepId) {
+    AppState.activeKeep = null;
     const response = await api.get(`api/keeps/${keepId}`);
-    const modifiedKeep = new Keep(response.data);
-    logger.log('👉', modifiedKeep);
-    const keep = AppState.keeps.find((keep) => keep.id === keepId);
-    // AppState.keeps.splice(keepIndex, 1, modifiedKeep);
-    keep.views = modifiedKeep.views;
-    keep.kept = modifiedKeep.kept;
+    const acquiredKeep = new Keep(response.data);
+    AppState.activeKeep = acquiredKeep;
+    AppState.activeKeep.views++;
   }
   async updateKeep(keepId, updatedKeepData) {
     const response = await api.put(`api/keeps/${keepId}`, updatedKeepData);
@@ -37,8 +34,8 @@ class KeepsService {
     const response = await api.get(`api/profiles/${profileId}/keeps`);
     AppState.keeps = response.data.map((keep) => new Keep(keep));
   }
-  async getAccountKeeps(accountId) {
-    const response = await api.get(`api/profiles/${accountId}/keeps`);
+  async getAccountKeeps() {
+    const response = await api.get('account/keeps');
     AppState.keeps = response.data.map((keep) => new Keep(keep));
   }
 }

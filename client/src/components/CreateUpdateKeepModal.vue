@@ -66,8 +66,8 @@ async function updateKeep() {
     const confirmed = await Pop.confirm("Confirm Changes?");
     if (!confirmed) return;
     await keepsService.updateKeep(props.keepProp.id, updatableKeepData.value);
-    Pop.toast("Vault updated successfully!", "success", "top");
-    Modal.getInstance('#create-update-vault').hide();
+    Pop.toast("Keep updated successfully!", "success", "top");
+    Modal.getInstance('#create-update-keep').hide();
   }
   catch (e) {
     Pop.error(e);

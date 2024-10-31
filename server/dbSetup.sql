@@ -80,4 +80,10 @@ WHERE
 
 SELECT * FROM accounts;
 
-SELECT * FROM vaults WHERE creatorId = '67101eb1422e8c2c9b081a25'
+SELECT *
+FROM
+    vault_keeps
+    JOIN keeps ON keeps.id = vault_keeps.`keepId`
+    JOIN vaults ON vaults.id = vault_keeps.`vaultId`
+WHERE
+    vaults.id = 4;

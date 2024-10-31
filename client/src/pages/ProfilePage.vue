@@ -72,10 +72,10 @@ async function getProfileKeeps() {
       </div>
       <div v-if="vaults && keeps" class="col-md-9 mx-auto">
         <h3 class="ms-1">Vaults</h3>
-        <VaultCard />
+        <VaultCard v-if="vaults" />
 
         <h3 class="ms-1 mt-4">Keeps</h3>
-        <KeepCard />
+        <KeepCard v-if="keeps" />
       </div>
     </div>
   </section>

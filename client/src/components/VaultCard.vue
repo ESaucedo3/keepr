@@ -1,31 +1,14 @@
 <script setup>
 import ModalWrapper from './ModalWrapper.vue';
 import CreateUpdateVaultModal from './CreateUpdateVaultModal.vue';
-import { computed, onMounted, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { computed, ref } from 'vue';
 import { AppState } from '@/AppState.js';
 import Pop from '@/utils/Pop.js';
 import { logger } from '@/utils/Logger.js';
 import { vaultsService } from '@/services/VaultsService.js';
 
-const route = useRoute();
 const account = computed(() => AppState.account);
 const vaults = computed(() => AppState.vaults);
-
-onMounted(() => getVaults());
-
-async function getVaults() {
-  try {
-    if (route.name === 'Account') {
-      logger.log("Getting your vaults");
-      await vaultsService.getAccountVaults();
-    }
-  }
-  catch (e) {
-    Pop.error(e);
-    logger.error(e)
-  }
-}
 
 async function deleteVault(vaultId) {
   try {

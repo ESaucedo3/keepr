@@ -55,13 +55,15 @@ public class VaultKeepsRepository
     SELECT 
       vault_keeps.id AS vaultKeepId,
       keeps.*,
+      COUNT(vault_keeps.keepId) AS kept,
       accounts.*
-    FROM
-      vault_keeps
-      JOIN keeps ON keeps.id = vault_keeps.keepId
+    FROM vault_keeps
       JOIN accounts ON accounts.id = vault_keeps.creatorId
+      LEFT OUTER JOIN keeps ON keeps.id = vault_keeps.keepId
     WHERE
-      vault_keeps.vaultId = @vaultId;";
+      vault_keeps.vaultId = @vaultId
+    GROUP BY
+      vault_keeps.id;";
 
     return _db.Query(sql, (VaultKeepKeep vk, Profile p) =>
     {

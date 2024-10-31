@@ -1,30 +1,33 @@
 <script setup>
 import { AppState } from '@/AppState.js';
 import { keepsService } from '@/services/KeepsService.js';
-import { computed, onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { computed, ref } from 'vue';
 import ModalWrapper from './ModalWrapper.vue';
-import KeepModal from './KeepModal.vue';
 import { logger } from '@/utils/Logger.js';
 import Pop from '@/utils/Pop.js';
 import CreateUpdateKeepModal from './CreateUpdateKeepModal.vue';
+import { useRoute } from 'vue-router';
+import { vaultKeepsService } from '@/services/VaultKeepsService.js';
+import KeepModal from './KeepModal.vue';
 
 const route = useRoute();
 const account = computed(() => AppState.account);
 const keeps = computed(() => AppState.keeps);
+const vaultKeeps = computed(() => AppState.vaultKeeps);
 
-onMounted(() => getKeeps());
-
-async function getKeeps() {
+async function getSpecificKeep(keepId) {
   try {
-    if (route.name === 'Home') {
-      logger.log("Retreiving everyone's keeps");
-      await keepsService.getAllKeeps();
-    }
-    else if (route.name === 'Account') {
-      logger.log("Retreiving your keeps");
-      await keepsService.getAccountKeeps(account.value.id);
-    }
+    await keepsService.getSpecificKeep(keepId);
+  }
+  catch (e) {
+    Pop.error(e);
+    logger.error(e);
+  }
+}
+
+async function getSpecificVaultKeep(vaultKeep) {
+  try {
+    await vaultKeepsService.getSpecificVaultKeep(vaultKeep);
   }
   catch (e) {
     Pop.error(e);
@@ -45,11 +48,7 @@ async function deleteKeep(keepId) {
   }
 }
 
-const selectedKeep = ref(null);
 const keepToUpdate = ref(null);
-const openKeepDetailsModal = (keep) => {
-  selectedKeep.value = keep;
-}
 const openUpdateKeepModal = (keep) => {
   keepToUpdate.value = keep;
 }
@@ -57,7 +56,7 @@ const openUpdateKeepModal = (keep) => {
 
 
 <template>
-  <div class="masonry-design mb-3">
+  <div v-if="route.name !== 'Vault'" class="masonry-design mb-3">
     <div v-for="keep in keeps" :key="keep.id" class="rounded shadow position-relative">
       <img class="rounded" :src="keep.imgUrl" :alt="keep.name">
       <div class="position-absolute start-0 end-0 bottom-0 d-flex justify-content-between align-items-end">
@@ -70,7 +69,9 @@ const openUpdateKeepModal = (keep) => {
             :alt="keep.creator.name">
         </div>
       </div>
-      <button @click="openKeepDetailsModal(keep)" class="position-absolute top-0 start-0 w-100 h-100 special-keep-btn"
+
+
+      <button class="position-absolute top-0 start-0 w-100 h-100 special-keep-btn" @click="getSpecificKeep(keep.id)"
         type="button" data-bs-toggle="modal" data-bs-target="#keep-details"></button>
       <button @click="openUpdateKeepModal(keep)" v-if="keep.creatorId === account?.id"
         class="position-absolute update-keep-btn" type="button"><i class="fa-solid fa-pen" style="color: #1b96fa;"
@@ -80,14 +81,30 @@ const openUpdateKeepModal = (keep) => {
           style="color: #ff3333;"></i></button>
     </div>
   </div>
+  <div v-else class="masonry-design mb-3">
+    <div v-for="vaultKeep in vaultKeeps" :key="vaultKeep.id" class="rounded shadow position-relative">
+      <img class="rounded" :src="vaultKeep.imgUrl" :alt="vaultKeep.name">
+      <div class="position-absolute start-0 end-0 bottom-0 d-flex justify-content-between align-items-end">
+        <div class="mb-2 px-3">
+          <h5 class="m-0 fw-bold fs-4 text-light">{{ vaultKeep.name }}</h5>
+        </div>
+
+        <div class="mb-2 px-3">
+          <img :title="`${vaultKeep.creator.name}'s picture'`" class="user-img m-0" :src="vaultKeep.creator.picture"
+            :alt="vaultKeep.creator.name">
+        </div>
+      </div>
+
+      <button class="position-absolute top-0 start-0 w-100 h-100 special-keep-btn"
+        @click="getSpecificVaultKeep(vaultKeep)" type="button" data-bs-toggle="modal"
+        data-bs-target="#keep-details"></button>
+    </div>
+  </div>
   <ModalWrapper id="create-update-keep">
     <CreateUpdateKeepModal :keepProp="keepToUpdate" @closed-edit-modal="keepToUpdate = null" />
   </ModalWrapper>
   <ModalWrapper id="keep-details">
-    <div v-if="selectedKeep" class="position-fixed top-0 right-0 bg-dark text-light">
-      {{ selectedKeep?.name }} {{ selectedKeep.kept }} 🎈
-    </div>
-    <KeepModal v-if="selectedKeep" :keepProp="selectedKeep" :accountProp="account" />
+    <KeepModal />
   </ModalWrapper>
 </template>
 

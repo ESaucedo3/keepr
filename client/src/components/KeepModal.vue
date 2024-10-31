@@ -1,60 +1,27 @@
 <script setup>
 import { AppState } from '@/AppState.js';
-import { Account } from '@/models/Account.js';
-import { Keep } from '@/models/Keep.js';
-import { keepsService } from '@/services/KeepsService.js';
 import { vaultKeepsService } from '@/services/VaultKeepsService.js';
-import { vaultsService } from '@/services/VaultsService.js';
 import { logger } from '@/utils/Logger.js';
 import Pop from '@/utils/Pop.js';
-import { Modal } from 'bootstrap';
-import { computed, onMounted, ref, watch } from 'vue';
-import { onBeforeRouteLeave, useRoute } from 'vue-router';
+import Modal from 'bootstrap/js/dist/modal.js';
+import { computed, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const vaults = computed(() => AppState.vaults);
-
-const props = defineProps({
-  accountProp: { type: Account },
-  keepProp: { type: Keep, required: true },
-})
+const account = computed(() => AppState.account);
+const activeKeep = computed(() => AppState.activeKeep);
+const activeVaultKeep = computed(() => AppState.activeVaultKeep);
+const vault = computed(() => AppState.vault);
 
 const createVaultKeepData = ref({
   keepId: null,
   vaultId: null
 });
 
-onMounted(() => {
-  if (route.name === 'Home') {
-    getAccountVaults();
-  }
-})
-
-onBeforeRouteLeave(() => {
-  Modal.getInstance("#keep-details").hide();
-})
-
-watch(() => props.keepProp, () => {
-  incrementKeepViewCount();
-  createVaultKeepData.value.keepId = props.keepProp?.id;
-}, { immediate: true });
-
-async function incrementKeepViewCount() {
-  await keepsService.getSpecificKeep(props.keepProp.id);
-}
-
-async function getAccountVaults() {
-  try {
-    logger.log("Getting vaults because you are signed in")
-    await vaultsService.getAccountVaults();
-  }
-  catch (error) {
-    Pop.error(error);
-  }
-}
-
 async function createVaultKeep() {
   try {
+    createVaultKeepData.value.keepId = activeKeep.value.id;
     await vaultKeepsService.createVaultKeep(createVaultKeepData.value);
     Pop.toast("VaultKeep created successfully!", "success", "top");
   }
@@ -64,30 +31,38 @@ async function createVaultKeep() {
   }
 }
 
+async function deleteVaultKeep(keepId, vaultKeepId) {
+  const confirmed = await Pop.confirm("You sure you want to remove this keep from your vault?");
+  if (!confirmed) return;
+  await vaultKeepsService.deleteVaultKeep(keepId, vaultKeepId);
+  Pop.toast("Vault Keep successfully deleted", "success", "top");
+  Modal.getInstance("#keep-details").hide();
+}
+
 </script>
 
 <template>
   <section class="container-fluid">
-    <div class="row">
+    <div v-if="activeKeep && route.name !== 'Vault'" class="row">
       <div class="col-md-6 p-0">
         <div>
-          <img class="keep-img" :src="keepProp.imgUrl" :alt="keepProp.name">
+          <img class="keep-img" :src="activeKeep.imgUrl" :alt="activeKeep.name">
         </div>
       </div>
       <div class="col-md-6">
         <div class="d-flex flex-column justify-content-between align-items-center h-100 px-2 py-3">
           <div class="d-flex">
-            <p><i class="fa-regular fa-eye"></i> {{ keepProp.views }} | <i class="fa-solid fa-floppy-disk"></i> {{
-              keepProp.kept }}</p>
+            <p><i class="fa-regular fa-eye"></i> {{ activeKeep.views }} | <i class="fa-solid fa-floppy-disk"></i> {{
+              activeKeep.kept }}</p>
           </div>
 
           <div class="details">
-            <h4 class="text-center">{{ keepProp.name }}</h4>
-            <p>{{ keepProp.description }}</p>
+            <h4 class="text-center">{{ activeKeep.name }}</h4>
+            <p>{{ activeKeep.description }}</p>
           </div>
 
           <div class="d-flex justify-content-between w-100">
-            <form v-if="route.name !== 'Profile'" class="align-self-end" @submit.prevent="createVaultKeep()">
+            <form v-if="route.name === 'Home' && account" class="align-self-end" @submit.prevent="createVaultKeep()">
               <div class="d-flex">
                 <select v-model="createVaultKeepData.vaultId" class="form-select" name="vaultSelect" id="vaultSelect">
                   <option disabled selected value="">Select a vault</option>
@@ -97,24 +72,72 @@ async function createVaultKeep() {
               </div>
             </form>
             <div class="ms-auto">
-              <RouterLink v-if="accountProp?.id === keepProp.creatorId" :to="{ name: 'Account' }"
-                :title="`Go to ${keepProp.creator.name}'s profile`">
+              <RouterLink v-if="account && account?.id === activeKeep.creatorId" :to="{ name: 'Account' }"
+                :title="`Go to ${activeKeep.creator.name}'s profile`">
                 <div class="d-flex align-items-center">
-                  <img class="creator-img" :src="keepProp.creator.picture" :alt="keepProp.creator.name">
-                  <p class="m-0 ms-2">{{ keepProp.creator.name }}</p>
+                  <img class="creator-img" :src="activeKeep.creator.picture" :alt="activeKeep.creator.name">
+                  <p class="m-0 ms-2">{{ activeKeep.creator.name }}</p>
                 </div>
               </RouterLink>
-              <RouterLink v-else :to="{ name: 'Profile', params: { profileId: keepProp.creatorId } }"
-                :title="`Go to ${keepProp.creator.name}'s profile`">
+              <RouterLink v-else :to="{ name: 'Profile', params: { profileId: activeKeep.creatorId } }"
+                :title="`Go to ${activeKeep.creator.name}'s profile`">
                 <div class="d-flex align-items-center">
-                  <img class="creator-img" :src="keepProp.creator.picture" :alt="keepProp.creator.name">
-                  <p class="m-0 ms-2">{{ keepProp.creator.name }}</p>
+                  <img class="creator-img" :src="activeKeep.creator.picture" :alt="activeKeep.creator.name">
+                  <p class="m-0 ms-2">{{ activeKeep.creator.name }}</p>
                 </div>
               </RouterLink>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div v-else-if="activeVaultKeep && route.name === 'Vault'" class="row">
+      <div class="col-md-6 p-0">
+        <div>
+          <img class="keep-img" :src="activeVaultKeep.imgUrl" :alt="activeVaultKeep.name">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="d-flex flex-column justify-content-between align-items-center h-100 px-2 py-3">
+          <div class="d-flex">
+            <p><i class="fa-regular fa-eye"></i> {{ activeVaultKeep.views }} | <i class="fa-solid fa-floppy-disk"></i>
+              {{
+                activeVaultKeep.kept }}</p>
+          </div>
+
+          <div class="details">
+            <h4 class="text-center">{{ activeVaultKeep.name }}</h4>
+            <p>{{ activeVaultKeep.description }}</p>
+          </div>
+
+          <div class="d-flex justify-content-between w-100">
+            <button v-if="vault.creatorId === account?.id" type="button" class="delete-vault-keep-btn"
+              @click="deleteVaultKeep(activeVaultKeep.id, activeVaultKeep.vaultKeepId)">
+              <i class="fa-solid fa-x" style="color: #ff0000;"></i>
+              Remove
+            </button>
+            <div class="ms-auto">
+              <RouterLink v-if="account && account?.id === activeVaultKeep.creatorId" :to="{ name: 'Account' }"
+                :title="`Go to ${activeVaultKeep.creator.name}'s profile`">
+                <div class="d-flex align-items-center">
+                  <img class="creator-img" :src="activeVaultKeep.creator.picture" :alt="activeVaultKeep.creator.name">
+                  <p class="m-0 ms-2">{{ activeVaultKeep.creator.name }}</p>
+                </div>
+              </RouterLink>
+              <RouterLink v-else :to="{ name: 'Profile', params: { profileId: activeVaultKeep.creatorId } }"
+                :title="`Go to ${activeVaultKeep.creator.name}'s profile`">
+                <div class="d-flex align-items-center">
+                  <img class="creator-img" :src="activeVaultKeep.creator.picture" :alt="activeVaultKeep.creator.name">
+                  <p class="m-0 ms-2">{{ activeVaultKeep.creator.name }}</p>
+                </div>
+              </RouterLink>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      Loading...
     </div>
   </section>
 </template>
@@ -147,5 +170,11 @@ a {
     margin-top: 75px;
     margin-bottom: 75px;
   }
+}
+
+.delete-vault-keep-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
 }
 </style>

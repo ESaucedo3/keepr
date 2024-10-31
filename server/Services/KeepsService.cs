@@ -52,4 +52,9 @@ public class KeepsService
   {
     return _repository.GetProfileKeeps(profileId);
   }
+
+  internal List<Keep> GetAccountKeeps(string userId)
+  {
+    return _repository.GetAccountKeeps(userId);
+  }
 }
