@@ -78,10 +78,10 @@ const openUpdateKeepModal = (keep) => {
       <button class="position-absolute top-0 start-0 w-100 h-100 special-keep-btn" @click="getSpecificKeep(keep.id)"
         type="button"></button>
       <button @click="openUpdateKeepModal(keep)" v-if="keep.creatorId === account?.id"
-        class="position-absolute update-keep-btn" type="button"><i class="fa-solid fa-pen"
+        class="position-absolute update-keep-btn" type="button" title="Edit Keep"><i class="fa-solid fa-pen"
           style="color: #1b96fa;"></i></button>
       <button @click="deleteKeep(keep.id)" v-if="keep.creatorId === account?.id"
-        class="position-absolute delete-keep-btn" type="button"><i class="fa-solid fa-x"
+        class="position-absolute delete-keep-btn" type="button" title="Delete Keep"><i class="fa-solid fa-x"
           style="color: #ff3333;"></i></button>
     </div>
   </div>

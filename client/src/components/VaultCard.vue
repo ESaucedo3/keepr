@@ -43,12 +43,12 @@ const openUpdateVaultModal = (vault) => {
         <div v-if="vault.creatorId === account?.id"
           class="position-absolute start-0 end-0 top-0 d-flex justify-content-between pt-1 px-1">
           <div class="special-vault-btn">
-            <button @click="openUpdateVaultModal(vault)" class="update-vault-btn" type="button"><i
+            <button @click="openUpdateVaultModal(vault)" class="update-vault-btn" type="button" title="Edit vault"><i
                 class="fa-solid fa-pen" style="color: #1b96fa;"></i></button>
           </div>
           <div class="special-vault-btn">
-            <button @click="deleteVault(vault.id)" class="delete-vault-btn" type="button"><i class="fa-solid fa-x"
-                style="color: #ff3333;"></i></button>
+            <button @click="deleteVault(vault.id)" class="delete-vault-btn" type="button" title="Delete vault"><i
+                class="fa-solid fa-x" style="color: #ff3333;"></i></button>
           </div>
         </div>
         <div class="position-absolute start-0 end-0 bottom-0 d-flex justify-content-between px-2">
