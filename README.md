@@ -9,21 +9,15 @@ Keepr is a full-stack application designed for users to share and manage images,
 - **VaultKeep Management**: Easily delete a vaultkeep to remove the relationship between a vault and a keep.
 
 ## Technologies Utilized
-- [**HTML**](https://developer.mozilla.org/en-US/docs/Web/HTML)  
 
-- [**CSS**](https://developer.mozilla.org/en-US/docs/Web/CSS)  
-
-- [**JavaScript**](https://developer.mozilla.org/en-US/docs/Web/JavaScript)  
-
-- [**C#**](https://learn.microsoft.com/en-us/dotnet/csharp/)
+- C#
+- JavaScript
+- MySQL
+- VueJS with Vue Router
+- .NET Core WebAPI
+- HTML
+- CSS
+- Bootstrap
   
-- [**MySQL**](https://www.mysql.com)
-  
-- [**VueJS with Vue Router**](https://vuejs.org)  
-
-- [**.NET Core WebAPI**](https://dotnet.microsoft.com)  
-
-- [**Bootstrap**](https://getbootstrap.com)  
-
 ## View the application itself
 You can see the application in action and how it works using the link here or up above: https://keepr.eduardososasaucedo.dev
