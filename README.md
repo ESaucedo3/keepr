@@ -9,30 +9,21 @@ Keepr is a full-stack application designed for users to share and manage images,
 - **VaultKeep Management**: Easily delete a vaultkeep to remove the relationship between a vault and a keep.
 
 ## Technologies Utilized
+- [**HTML**](https://developer.mozilla.org/en-US/docs/Web/HTML)  
 
-- **VueJS with Vue Router**  
-  ![VueJS](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D)
+- [**CSS**](https://developer.mozilla.org/en-US/docs/Web/CSS)  
 
-- **.NET Core WebAPI**  
-  ![.NET](https://img.shields.io/badge/.NET_Core-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+- [**JavaScript**](https://developer.mozilla.org/en-US/docs/Web/JavaScript)  
 
-- **MySQL**  
-  ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+- [**C#**](https://learn.microsoft.com/en-us/dotnet/csharp/)
+  
+- [**MySQL**](https://www.mysql.com)
+  
+- [**VueJS with Vue Router**](https://vuejs.org)  
 
-- **Bootstrap**  
-  ![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
+- [**.NET Core WebAPI**](https://dotnet.microsoft.com)  
 
-- **HTML**  
-  ![HTML](https://img.shields.io/badge/HTML-239120?style=for-the-badge&logo=html5&logoColor=white)
+- [**Bootstrap**](https://getbootstrap.com)  
 
-- **CSS**  
-  ![CSS](https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-
-- **JavaScript**  
-  ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-
-- **C#**  
-  ![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white)
-
-## Application Itself
+## View the application itself
 You can see the application in action and how it works using the link here or up above: https://keepr.eduardososasaucedo.dev
